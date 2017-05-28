@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		367045DF1EDACC2F009B392A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367045DE1EDACC2F009B392A /* main.swift */; };
+		367045EB1EDAE11B009B392A /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367045EA1EDAE11B009B392A /* HelperFunctions.swift */; };
+		367045ED1EDAE13E009B392A /* String+COAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367045EC1EDAE13E009B392A /* String+COAdditions.swift */; };
+		367045EF1EDAE1DD009B392A /* WSDLDefinitionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367045EE1EDAE1DD009B392A /* WSDLDefinitionParser.swift */; };
+		367045F11EDAE31C009B392A /* XML2SwiftFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367045F01EDAE31C009B392A /* XML2SwiftFiles.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +29,17 @@
 /* Begin PBXFileReference section */
 		367045DB1EDACC2F009B392A /* ServicesFromWSDL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ServicesFromWSDL; sourceTree = BUILT_PRODUCTS_DIR; };
 		367045DE1EDACC2F009B392A /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		367045E51EDAE0B7009B392A /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
+		367045E61EDAE0B7009B392A /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		367045E71EDAE0E7009B392A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		367045E81EDAE0E7009B392A /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		367045EA1EDAE11B009B392A /* HelperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperFunctions.swift; sourceTree = "<group>"; };
+		367045EC1EDAE13E009B392A /* String+COAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+COAdditions.swift"; sourceTree = "<group>"; };
+		367045EE1EDAE1DD009B392A /* WSDLDefinitionParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSDLDefinitionParser.swift; sourceTree = "<group>"; };
+		367045F01EDAE31C009B392A /* XML2SwiftFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XML2SwiftFiles.swift; sourceTree = "<group>"; };
+		367046241EDAE7C1009B392A /* info.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = info.xml; sourceTree = "<group>"; };
+		367046251EDAE7C1009B392A /* tracking.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tracking.xml; sourceTree = "<group>"; };
+		367046261EDAE7C1009B392A /* user.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = user.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +56,10 @@
 		367045D21EDACC2F009B392A = {
 			isa = PBXGroup;
 			children = (
+				367045E71EDAE0E7009B392A /* README.md */,
+				367045E81EDAE0E7009B392A /* LICENSE */,
+				367045E61EDAE0B7009B392A /* .gitignore */,
+				367045E51EDAE0B7009B392A /* .swiftlint.yml */,
 				367045DD1EDACC2F009B392A /* ServicesFromWSDL */,
 				367045DC1EDACC2F009B392A /* Products */,
 			);
@@ -58,8 +77,39 @@
 			isa = PBXGroup;
 			children = (
 				367045DE1EDACC2F009B392A /* main.swift */,
+				367045EE1EDAE1DD009B392A /* WSDLDefinitionParser.swift */,
+				367045F01EDAE31C009B392A /* XML2SwiftFiles.swift */,
+				367045EA1EDAE11B009B392A /* HelperFunctions.swift */,
+				367045EC1EDAE13E009B392A /* String+COAdditions.swift */,
+				367045F21EDAE74D009B392A /* example */,
 			);
 			path = ServicesFromWSDL;
+			sourceTree = "<group>";
+		};
+		367045F21EDAE74D009B392A /* example */ = {
+			isa = PBXGroup;
+			children = (
+				367045F41EDAE74D009B392A /* GeneratedFiles */,
+				367046211EDAE74D009B392A /* wsdl */,
+			);
+			path = example;
+			sourceTree = "<group>";
+		};
+		367045F41EDAE74D009B392A /* GeneratedFiles */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = GeneratedFiles;
+			sourceTree = "<group>";
+		};
+		367046211EDAE74D009B392A /* wsdl */ = {
+			isa = PBXGroup;
+			children = (
+				367046241EDAE7C1009B392A /* info.xml */,
+				367046251EDAE7C1009B392A /* tracking.xml */,
+				367046261EDAE7C1009B392A /* user.xml */,
+			);
+			path = wsdl;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,6 +172,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				367045DF1EDACC2F009B392A /* main.swift in Sources */,
+				367045EF1EDAE1DD009B392A /* WSDLDefinitionParser.swift in Sources */,
+				367045EB1EDAE11B009B392A /* HelperFunctions.swift in Sources */,
+				367045F11EDAE31C009B392A /* XML2SwiftFiles.swift in Sources */,
+				367045ED1EDAE13E009B392A /* String+COAdditions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
