@@ -42,6 +42,9 @@ class XML2SwiftFiles {
         let indent = "    "
         classString += "\(indent)private let connector: ServerServicesConnector\n"
 
+        classString += "\(indent)enum DTOServiceError: Error {\n"
+        classString += "\(indent)\(indent)case none, unableToCreateDTO\n\(indent)}\n"
+
         classString += "\n\(indent)init(connector: ServerServicesConnector) {\n"
         classString += "\(indent)    self.connector = connector\n\(indent)}\n"
 
