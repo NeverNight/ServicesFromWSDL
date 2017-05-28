@@ -37,17 +37,18 @@ class XML2SwiftFiles {
         if !dtoModuleName.isEmpty {
             classString += "import \(dtoModuleName)\n"
         }
-        classString += "\npublic struct \(filename) {\n"
+        classString += "\nstruct \(filename) {\n"
 
         let indent = "    "
         classString += "\(indent)private let connector: ServerServicesConnector\n"
 
-        classString += "\n\(indent)public init(connector: ServerServicesConnector) {\n"
+        classString += "\n\(indent)init(connector: ServerServicesConnector) {\n"
         classString += "\(indent)    self.connector = connector\n\(indent)}\n"
 
         for service in parser.services {
             var repl = [[String]]()
-            classString += "\n\(indent)public func \(service.name)("
+            var hasInput = false
+            classString += "\n\(indent)func \(service.name)("
             if let inputType = service.input?.type,
                 !inputType.isEmpty {
                 let inputTypeResolved = inputType.components(separatedBy: ":").last!.capitalizedFirst
@@ -57,6 +58,7 @@ class XML2SwiftFiles {
                 } else {
                     classString += "input: \(inputTypeResolved), "
                 }
+                hasInput = true
             }
             if let outputType = service.output?.type,
                 !outputType.isEmpty {
@@ -72,9 +74,13 @@ class XML2SwiftFiles {
                 classString += "completion: ((Error?) -> Void)?) {\n"
             }
             for stringpair in repl {
-                classString += "\(indent)\(indent)// replaced protocol type: \(stringpair[0]) with concrete subclass: \(stringpair[1])"
+                classString += "\(indent)\(indent)// replaced protocol type: \(stringpair[0]) with concrete subclass: \(stringpair[1])\n"
             }
+            if hasInput {
             classString += "\(indent)\(indent)call(\"\(service.name)\", parameters: [\"req\": input.jsobjRepresentation], completion: completion)\n\(indent)}\n"
+            } else {
+classString += "\(indent)\(indent)call(\"\(service.name)\", parameters: nil, completion: completion)\n\(indent)}\n"
+            }
 
         }
 
@@ -89,7 +95,7 @@ class XML2SwiftFiles {
         classString += "\n\(indent)private func call(_ function: String, parameters: JSOBJ?, completion: ((Error?) -> Void)?) {\n"
         classString += "\(indent)\(indent)connector.callServerFunction(named: function, parameters: parameters) { (rslt, error) in\n"
         classString += "\(indent)\(indent)\(indent)completion?(error)\n\(indent)\(indent)}\n\(indent)}\n"
-        
+
         classString += "}"
         return classString
     }

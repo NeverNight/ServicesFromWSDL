@@ -12,7 +12,6 @@ import Foundation
 let copyRightString = "Copyright (c) 2016 Farbflash. All rights reserved."
 let dtoModuleName = "DLRModels"
 
-
 func readProtocolParentLookup(targetFolder: String?) -> [String: [String]] {
     guard let targetFolder = targetFolder else { return [String: [String]]() }
     let fileurl = URL(fileURLWithPath: targetFolder)
@@ -22,7 +21,6 @@ func readProtocolParentLookup(targetFolder: String?) -> [String: [String]] {
         let lookuplist = json as? [String: [String]] else { return [String: [String]]() }
     return lookuplist
 }
-
 
 if CommandLine.arguments.count < 3 {
     // Expecting a string but didn't receive it

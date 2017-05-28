@@ -70,6 +70,14 @@
             argument = "$PROJECT_DIR/ServicesFromWSDL/example/wsdl/user.xml"
             isEnabled = "YES">
          </CommandLineArgument>
+         <CommandLineArgument
+            argument = "$PROJECT_DIR/ServicesFromWSDL/example/wsdl/tracking.xml"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "$PROJECT_DIR/ServicesFromWSDL/example/wsdl/info.xml"
+            isEnabled = "YES">
+         </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>

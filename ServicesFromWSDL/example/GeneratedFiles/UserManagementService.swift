@@ -19,7 +19,8 @@ public struct UserManagementService {
         self.connector = connector
     }
 
-    public func updatePersonalData(input: UpdatePersonalDataRequest, completion: ((SessionResponse?, Error?) -> Void)?) {
+    public func updatePersonalData(input: UpdatePersonalDataRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
+        // replaced protocol type: SessionResponse with concrete subclass: GetPersonsResponse
         call("updatePersonalData", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
@@ -39,19 +40,23 @@ public struct UserManagementService {
         call("deletePoi", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func updatePassword(input: UpdatePasswordRequest, completion: ((SessionResponse?, Error?) -> Void)?) {
+    public func updatePassword(input: UpdatePasswordRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
+        // replaced protocol type: SessionResponse with concrete subclass: GetPersonsResponse
         call("updatePassword", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func resetPassword(input: ResetPasswordRequest, completion: ((DefaultResponse?, Error?) -> Void)?) {
+    public func resetPassword(input: ResetPasswordRequest, completion: ((GetStatisticResponse?, Error?) -> Void)?) {
+        // replaced protocol type: DefaultResponse with concrete subclass: GetStatisticResponse
         call("resetPassword", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func sendRegistrationKeys(input: RegistrationKeyDispatchRequest, completion: ((SessionResponse?, Error?) -> Void)?) {
+    public func sendRegistrationKeys(input: RegistrationKeyDispatchRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
+        // replaced protocol type: SessionResponse with concrete subclass: GetPersonsResponse
         call("sendRegistrationKeys", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func getPersonalData(input: SessionRequest, completion: ((GetPersonalDataResponse?, Error?) -> Void)?) {
+    public func getPersonalData(input: DeletePoiRequest, completion: ((GetPersonalDataResponse?, Error?) -> Void)?) {
+        // replaced protocol type: SessionRequest with concrete subclass: DeletePoiRequest
         call("getPersonalData", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
@@ -63,7 +68,8 @@ public struct UserManagementService {
         call("login", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func logout(input: SessionRequest, completion: ((Error?) -> Void)?) {
+    public func logout(input: DeletePoiRequest, completion: ((Error?) -> Void)?) {
+        // replaced protocol type: SessionRequest with concrete subclass: DeletePoiRequest
         call("logout", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 

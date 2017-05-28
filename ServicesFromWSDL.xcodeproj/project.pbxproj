@@ -42,8 +42,11 @@
 		367046241EDAE7C1009B392A /* info.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = info.xml; sourceTree = "<group>"; };
 		367046251EDAE7C1009B392A /* tracking.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tracking.xml; sourceTree = "<group>"; };
 		367046261EDAE7C1009B392A /* user.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = user.xml; sourceTree = "<group>"; };
-		367046271EDAF989009B392A /* UserManagementService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManagementService.swift; sourceTree = "<group>"; };
 		367046381EDAFFBF009B392A /* Readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
+		367046681EDB6B9B009B392A /* InformationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InformationService.swift; sourceTree = "<group>"; };
+		367046691EDB6B9B009B392A /* TrackingManagementService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingManagementService.swift; sourceTree = "<group>"; };
+		3670466A1EDB6B9B009B392A /* UserManagementService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManagementService.swift; sourceTree = "<group>"; };
+		3670466B1EDB6B9B009B392A /* DTOParentInfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = DTOParentInfo.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,7 +106,10 @@
 		367045F41EDAE74D009B392A /* GeneratedFiles */ = {
 			isa = PBXGroup;
 			children = (
-				367046271EDAF989009B392A /* UserManagementService.swift */,
+				367046681EDB6B9B009B392A /* InformationService.swift */,
+				367046691EDB6B9B009B392A /* TrackingManagementService.swift */,
+				3670466A1EDB6B9B009B392A /* UserManagementService.swift */,
+				3670466B1EDB6B9B009B392A /* DTOParentInfo.json */,
 			);
 			path = GeneratedFiles;
 			sourceTree = "<group>";
