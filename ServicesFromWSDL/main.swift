@@ -8,10 +8,21 @@
 
 import Foundation
 
-
 /// adjust it for your needs, it is used for the header of each swift file
 let copyRightString = "Copyright (c) 2016 Farbflash. All rights reserved."
 let dtoModuleName = "DLRModels"
+
+
+func readProtocolParentLookup(targetFolder: String?) -> [String: [String]] {
+    guard let targetFolder = targetFolder else { return [String: [String]]() }
+    let fileurl = URL(fileURLWithPath: targetFolder)
+    let newUrl = fileurl.appendingPathComponent("DTOParentInfo.json")
+    guard let data = try? Data(contentsOf: newUrl),
+        let json = try? JSONSerialization.jsonObject(with: data as Data, options: .allowFragments),
+        let lookuplist = json as? [String: [String]] else { return [String: [String]]() }
+    return lookuplist
+}
+
 
 if CommandLine.arguments.count < 3 {
     // Expecting a string but didn't receive it
@@ -32,11 +43,14 @@ if !(url as NSURL).checkResourceIsReachableAndReturnError(&error) {
 
 let targetFolder: String? = CommandLine.arguments[1]
 
+let protocolParentLookup = readProtocolParentLookup(targetFolder: targetFolder)
+
 do {
     let xml = try XMLDocument(contentsOf: url, options: 0)
 
     if let parser = WSDLDefinitionParser(xmlData: xml) {
-        let generator = XML2SwiftFiles(parser: parser)
+        let generator = XML2SwiftFiles(parser: parser,
+                                       protocolInitializerLookup: protocolParentLookup)
         generator.generateFiles(inFolder: targetFolder)
     }
     // if there is more than one xml file specified
@@ -48,7 +62,8 @@ do {
         let thisUrl = URL(fileURLWithPath: thisPath)
         if let thisXML = try? XMLDocument(contentsOf: thisUrl, options: 0) {
             if let subparser = WSDLDefinitionParser(xmlData: thisXML) {
-                let generator = XML2SwiftFiles(parser: subparser)
+                let generator = XML2SwiftFiles(parser: subparser,
+                                               protocolInitializerLookup: protocolParentLookup)
                 generator.generateFiles(inFolder: targetFolder)
             }
         }
@@ -61,5 +76,3 @@ catch let err as NSError {
 
 // Finally, exit
 exit(EXIT_SUCCESS)
-
-

@@ -10,9 +10,11 @@ import Cocoa
 
 class XML2SwiftFiles {
     let parser: WSDLDefinitionParser
+    let protocolInitializerLookup: [String: [String]]
 
-    init(parser: WSDLDefinitionParser) {
+    init(parser: WSDLDefinitionParser, protocolInitializerLookup: [String: [String]]) {
         self.parser = parser
+        self.protocolInitializerLookup = protocolInitializerLookup
     }
 
     let indent = "    "
@@ -44,21 +46,36 @@ class XML2SwiftFiles {
         classString += "\(indent)    self.connector = connector\n\(indent)}\n"
 
         for service in parser.services {
+            var repl = [[String]]()
             classString += "\n\(indent)public func \(service.name)("
             if let inputType = service.input?.type,
                 !inputType.isEmpty {
-                let inputTypeResolved = inputType.components(separatedBy: ":").last!
-                classString += "input: \(inputTypeResolved), "
+                let inputTypeResolved = inputType.components(separatedBy: ":").last!.capitalizedFirst
+                if let protocolInitializer = protocolInitializerLookup[inputTypeResolved]?.first {
+                    classString += "input: \(protocolInitializer), "
+                    repl.append([inputTypeResolved, protocolInitializer])
+                } else {
+                    classString += "input: \(inputTypeResolved), "
+                }
             }
             if let outputType = service.output?.type,
                 !outputType.isEmpty {
                 let outputTypeResolved = outputType.components(separatedBy: ":").last!
-                classString += "completion: ((\(outputTypeResolved)?, Error?) -> Void)?) {\n"
+                    .capitalizedFirst
+                if let protocolInitializer = protocolInitializerLookup[outputTypeResolved]?.first {
+                    classString += "completion: ((\(protocolInitializer)?, Error?) -> Void)?) {\n"
+                    repl.append([outputTypeResolved, protocolInitializer])
+                } else {
+                    classString += "completion: ((\(outputTypeResolved)?, Error?) -> Void)?) {\n"
+                }
             } else {
                 classString += "completion: ((Error?) -> Void)?) {\n"
             }
+            for stringpair in repl {
+                classString += "\(indent)\(indent)// replaced protocol type: \(stringpair[0]) with concrete subclass: \(stringpair[1])"
+            }
             classString += "\(indent)\(indent)call(\"\(service.name)\", parameters: [\"req\": input.jsobjRepresentation], completion: completion)\n\(indent)}\n"
-            
+
         }
 
         classString += "\n\(indent)private func call<T: JSOBJSerializable>(_ function: String, parameters: JSOBJ?, completion: ((T?, Error?) -> Void)?) {\n"
@@ -69,11 +86,10 @@ class XML2SwiftFiles {
         classString += "\(indent)\(indent)\(indent)\(indent)else { completion?(nil, DTOServiceError.unableToCreateDTO) }\n"
         classString += "\(indent)\(indent)\(indent)}\n\(indent)\(indent)}\n\(indent)}\n"
 
-
         classString += "\n\(indent)private func call(_ function: String, parameters: JSOBJ?, completion: ((Error?) -> Void)?) {\n"
-            classString += "\n\(indent)\(indent)connector.callServerFunction(named: function, parameters: parameters) { (rslt, error) in\n"
-        classString += "\n\(indent)\(indent)\(indent)completion?(error)\n\(indent)\(indent)}\n\(indent)}"
-
+        classString += "\(indent)\(indent)connector.callServerFunction(named: function, parameters: parameters) { (rslt, error) in\n"
+        classString += "\(indent)\(indent)\(indent)completion?(error)\n\(indent)\(indent)}\n\(indent)}\n"
+        
         classString += "}"
         return classString
     }

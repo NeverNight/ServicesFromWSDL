@@ -18,10 +18,6 @@ struct Message {
     let type: String
 }
 
-extension XMLElement {
-
-}
-
 struct WSDLDefinitionParser {
     let serviceName: String
     let services: [Service]
@@ -53,15 +49,19 @@ struct WSDLDefinitionParser {
             guard let srvName = port.attribute(forName: "name")?.stringValue else { continue }
             let inputMsg: Message?
             if let input = port.elements(forName: "input").first,
-                let msg = input.attribute(forName: "message")?.stringValue {
-                inputMsg = messages.first(where: { $0.name == msg })
+                let msg = input.attribute(forName: "message")?.stringValue,
+                !msg.isEmpty,
+                let resolvedMessageName = msg.components(separatedBy: ":").last {
+                inputMsg = messages.first(where: { $0.name == resolvedMessageName })
             } else {
                 inputMsg = nil
             }
             let outputMsg: Message?
             if let output = port.elements(forName: "output").first,
-                let msg = output.attribute(forName: "message")?.stringValue {
-                outputMsg = messages.first(where: { $0.name == msg })
+                let msg = output.attribute(forName: "message")?.stringValue,
+                !msg.isEmpty,
+                let resolvedMessageName = msg.components(separatedBy: ":").last {
+                outputMsg = messages.first(where: { $0.name == resolvedMessageName })
             } else {
                 outputMsg = nil
             }

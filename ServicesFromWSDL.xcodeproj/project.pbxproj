@@ -12,17 +12,19 @@
 		367045ED1EDAE13E009B392A /* String+COAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367045EC1EDAE13E009B392A /* String+COAdditions.swift */; };
 		367045EF1EDAE1DD009B392A /* WSDLDefinitionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367045EE1EDAE1DD009B392A /* WSDLDefinitionParser.swift */; };
 		367045F11EDAE31C009B392A /* XML2SwiftFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367045F01EDAE31C009B392A /* XML2SwiftFiles.swift */; };
+		367046391EDB0038009B392A /* Readme.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 367046381EDAFFBF009B392A /* Readme.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		367045D91EDACC2F009B392A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 7;
 			files = (
+				367046391EDB0038009B392A /* Readme.txt in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -40,6 +42,8 @@
 		367046241EDAE7C1009B392A /* info.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = info.xml; sourceTree = "<group>"; };
 		367046251EDAE7C1009B392A /* tracking.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tracking.xml; sourceTree = "<group>"; };
 		367046261EDAE7C1009B392A /* user.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = user.xml; sourceTree = "<group>"; };
+		367046271EDAF989009B392A /* UserManagementService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManagementService.swift; sourceTree = "<group>"; };
+		367046381EDAFFBF009B392A /* Readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +86,7 @@
 				367045EA1EDAE11B009B392A /* HelperFunctions.swift */,
 				367045EC1EDAE13E009B392A /* String+COAdditions.swift */,
 				367045F21EDAE74D009B392A /* example */,
+				367046381EDAFFBF009B392A /* Readme.txt */,
 			);
 			path = ServicesFromWSDL;
 			sourceTree = "<group>";
@@ -98,6 +103,7 @@
 		367045F41EDAE74D009B392A /* GeneratedFiles */ = {
 			isa = PBXGroup;
 			children = (
+				367046271EDAF989009B392A /* UserManagementService.swift */,
 			);
 			path = GeneratedFiles;
 			sourceTree = "<group>";
@@ -122,6 +128,7 @@
 				367045D71EDACC2F009B392A /* Sources */,
 				367045D81EDACC2F009B392A /* Frameworks */,
 				367045D91EDACC2F009B392A /* CopyFiles */,
+				3670463A1EDB006E009B392A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -165,6 +172,22 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3670463A1EDB006E009B392A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint autocorrect\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		367045D71EDACC2F009B392A /* Sources */ = {
