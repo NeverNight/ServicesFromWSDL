@@ -50,7 +50,7 @@ struct TrackingManagementService {
     }
 
     private func call<T: JSOBJSerializable>(_ function: String, parameters: JSOBJ?, completion: ((T?, Error?) -> Void)?) {
-        connector.callWSDLFunction(named: function, parameters: parameters, in: "TrackingManagementService") { (rslt, error) in
+        connector.callWSDLFunction(named: function, parameters: parameters, in: "tracking") { (rslt, error) in
             if let error = error { completion?(nil, error) }
             else {
                 if let obj = T(jsonData: (rslt as? [String: Any])?["return"] as? JSOBJ) { completion?(obj, nil) }                else { completion?(nil, DTOServiceError.unableToCreateDTO) }
@@ -59,7 +59,7 @@ struct TrackingManagementService {
     }
 
     private func call(_ function: String, parameters: JSOBJ?, completion: ((Error?) -> Void)?) {
-        connector.callWSDLFunction(named: function, parameters: parameters, in: "TrackingManagementService") { (rslt, error) in
+        connector.callWSDLFunction(named: function, parameters: parameters, in: "tracking") { (rslt, error) in
             completion?(error)
         }
     }

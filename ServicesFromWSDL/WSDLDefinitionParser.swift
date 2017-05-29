@@ -20,10 +20,11 @@ struct Message {
 
 struct WSDLDefinitionParser {
     let serviceName: String
+    let serviceIdentifier: String
     let services: [Service]
     let messages: [Message]
 
-    init?(xmlData: XMLDocument) {
+    init?(xmlData: XMLDocument, serviceIdentifier: String?) {
         guard let children = xmlData.children,
             !children.isEmpty,
             let model = children.first(where: { $0.name == "definitions" }) as? XMLElement else {
@@ -31,7 +32,9 @@ struct WSDLDefinitionParser {
         }
         guard let portType = model.elements(forName: "portType").first else { return nil }
 
-        serviceName = (model.attribute(forName: "name")?.stringValue ?? "") + "Service"
+        let servName = (model.attribute(forName: "name")?.stringValue ?? "") + "Service"
+        serviceName = servName
+        self.serviceIdentifier = serviceIdentifier ?? servName
 
         var messageArray = [Message]()
         let msgs = model.elements(forName: "message")

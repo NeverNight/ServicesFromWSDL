@@ -22,6 +22,15 @@ func readProtocolParentLookup(targetFolder: String?) -> [String: [String]] {
     return lookuplist
 }
 
+func filename(for url: URL) -> String? {
+    if let nameParts = url.pathComponents.last?.components(separatedBy: "."),
+        !nameParts.isEmpty {
+        if nameParts.count == 1 { return nameParts[0] }
+        return "\((nameParts[0..<(nameParts.count - 1)].joined(separator: ".")))"
+    }
+    return nil
+}
+
 if CommandLine.arguments.count < 3 {
     // Expecting a string but didn't receive it
     writeToStdError("Expected string argument defining the output folder and at least one path to an XML file!\n")
@@ -46,7 +55,7 @@ let protocolParentLookup = readProtocolParentLookup(targetFolder: targetFolder)
 do {
     let xml = try XMLDocument(contentsOf: url, options: 0)
 
-    if let parser = WSDLDefinitionParser(xmlData: xml) {
+    if let parser = WSDLDefinitionParser(xmlData: xml, serviceIdentifier: filename(for: url)) {
         let generator = XML2SwiftFiles(parser: parser,
                                        protocolInitializerLookup: protocolParentLookup)
         generator.generateFiles(inFolder: targetFolder)
@@ -59,7 +68,7 @@ do {
         i += 1
         let thisUrl = URL(fileURLWithPath: thisPath)
         if let thisXML = try? XMLDocument(contentsOf: thisUrl, options: 0) {
-            if let subparser = WSDLDefinitionParser(xmlData: thisXML) {
+            if let subparser = WSDLDefinitionParser(xmlData: thisXML, serviceIdentifier: filename(for: thisUrl)) {
                 let generator = XML2SwiftFiles(parser: subparser,
                                                protocolInitializerLookup: protocolParentLookup)
                 generator.generateFiles(inFolder: targetFolder)
