@@ -12,73 +12,76 @@
 import Foundation
 import DLRModels
 
-public struct UserManagementService {
+struct UserManagementService {
     private let connector: ServerServicesConnector
+    enum DTOServiceError: Error {
+        case none, unableToCreateDTO
+    }
 
-    public init(connector: ServerServicesConnector) {
+    init(connector: ServerServicesConnector) {
         self.connector = connector
     }
 
-    public func updatePersonalData(input: UpdatePersonalDataRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
+    func updatePersonalData(input: UpdatePersonalDataRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
         // replaced protocol type: SessionResponse with concrete subclass: GetPersonsResponse
         call("updatePersonalData", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func getPersons(input: GetPersonsRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
+    func getPersons(input: GetPersonsRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
         call("getPersons", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func addPoi(input: AddPoiRequest, completion: ((GetPoisResponse?, Error?) -> Void)?) {
+    func addPoi(input: AddPoiRequest, completion: ((GetPoisResponse?, Error?) -> Void)?) {
         call("addPoi", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func updatePoi(input: UpdatePoiRequest, completion: ((GetPoisResponse?, Error?) -> Void)?) {
+    func updatePoi(input: UpdatePoiRequest, completion: ((GetPoisResponse?, Error?) -> Void)?) {
         call("updatePoi", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func deletePoi(input: DeletePoiRequest, completion: ((GetPoisResponse?, Error?) -> Void)?) {
+    func deletePoi(input: DeletePoiRequest, completion: ((GetPoisResponse?, Error?) -> Void)?) {
         call("deletePoi", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func updatePassword(input: UpdatePasswordRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
+    func updatePassword(input: UpdatePasswordRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
         // replaced protocol type: SessionResponse with concrete subclass: GetPersonsResponse
         call("updatePassword", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func resetPassword(input: ResetPasswordRequest, completion: ((GetStatisticResponse?, Error?) -> Void)?) {
+    func resetPassword(input: ResetPasswordRequest, completion: ((GetStatisticResponse?, Error?) -> Void)?) {
         // replaced protocol type: DefaultResponse with concrete subclass: GetStatisticResponse
         call("resetPassword", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func sendRegistrationKeys(input: RegistrationKeyDispatchRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
+    func sendRegistrationKeys(input: RegistrationKeyDispatchRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
         // replaced protocol type: SessionResponse with concrete subclass: GetPersonsResponse
         call("sendRegistrationKeys", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func getPersonalData(input: DeletePoiRequest, completion: ((GetPersonalDataResponse?, Error?) -> Void)?) {
+    func getPersonalData(input: DeletePoiRequest, completion: ((GetPersonalDataResponse?, Error?) -> Void)?) {
         // replaced protocol type: SessionRequest with concrete subclass: DeletePoiRequest
         call("getPersonalData", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func verifyCompany(input: CompanyVerificationRequest, completion: ((CompanyVerificationResponse?, Error?) -> Void)?) {
+    func verifyCompany(input: CompanyVerificationRequest, completion: ((CompanyVerificationResponse?, Error?) -> Void)?) {
         call("verifyCompany", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func login(input: LoginRequest, completion: ((LoginResponse?, Error?) -> Void)?) {
+    func login(input: LoginRequest, completion: ((LoginResponse?, Error?) -> Void)?) {
         call("login", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func logout(input: DeletePoiRequest, completion: ((Error?) -> Void)?) {
+    func logout(input: DeletePoiRequest, completion: ((Error?) -> Void)?) {
         // replaced protocol type: SessionRequest with concrete subclass: DeletePoiRequest
         call("logout", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func register(input: RegistrationRequest, completion: ((LoginResponse?, Error?) -> Void)?) {
+    func register(input: RegistrationRequest, completion: ((LoginResponse?, Error?) -> Void)?) {
         call("register", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
     private func call<T: JSOBJSerializable>(_ function: String, parameters: JSOBJ?, completion: ((T?, Error?) -> Void)?) {
-        connector.callServerFunction(named: function, parameters: parameters) { (rslt, error) in
+        connector.callWSDLFunction(named: function, parameters: parameters) { (rslt, error) in
             if let error = error { completion?(nil, error) }
             else {
                 if let obj = T(jsonData: (rslt as? [String: Any])?["return"] as? JSOBJ) { completion?(obj, nil) }                else { completion?(nil, DTOServiceError.unableToCreateDTO) }
@@ -87,7 +90,7 @@ public struct UserManagementService {
     }
 
     private func call(_ function: String, parameters: JSOBJ?, completion: ((Error?) -> Void)?) {
-        connector.callServerFunction(named: function, parameters: parameters) { (rslt, error) in
+        connector.callWSDLFunction(named: function, parameters: parameters) { (rslt, error) in
             completion?(error)
         }
     }

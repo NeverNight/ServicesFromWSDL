@@ -88,7 +88,7 @@ classString += "\(indent)\(indent)call(\"\(service.name)\", parameters: nil, com
         }
 
         classString += "\n\(indent)private func call<T: JSOBJSerializable>(_ function: String, parameters: JSOBJ?, completion: ((T?, Error?) -> Void)?) {\n"
-        classString += "\(indent)\(indent)connector.callServerFunction(named: function, parameters: parameters) { (rslt, error) in\n"
+        classString += "\(indent)\(indent)connector.callWSDLFunction(named: function, parameters: parameters, in: \"\(parser.serviceName)\") { (rslt, error) in\n"
         classString += "\(indent)\(indent)\(indent)if let error = error { completion?(nil, error) }\n"
         classString += "\(indent)\(indent)\(indent)else {\n"
         classString += "\(indent)\(indent)\(indent)\(indent)if let obj = T(jsonData: (rslt as? [String: Any])?[\"return\"] as? JSOBJ) { completion?(obj, nil) }"
@@ -96,7 +96,7 @@ classString += "\(indent)\(indent)call(\"\(service.name)\", parameters: nil, com
         classString += "\(indent)\(indent)\(indent)}\n\(indent)\(indent)}\n\(indent)}\n"
 
         classString += "\n\(indent)private func call(_ function: String, parameters: JSOBJ?, completion: ((Error?) -> Void)?) {\n"
-        classString += "\(indent)\(indent)connector.callServerFunction(named: function, parameters: parameters) { (rslt, error) in\n"
+        classString += "\(indent)\(indent)connector.callWSDLFunction(named: function, parameters: parameters, in: \"\(parser.serviceName)\") { (rslt, error) in\n"
         classString += "\(indent)\(indent)\(indent)completion?(error)\n\(indent)\(indent)}\n\(indent)}\n"
 
         classString += "}"

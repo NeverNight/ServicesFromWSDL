@@ -12,42 +12,45 @@
 import Foundation
 import DLRModels
 
-public struct TrackingManagementService {
+struct TrackingManagementService {
     private let connector: ServerServicesConnector
+    enum DTOServiceError: Error {
+        case none, unableToCreateDTO
+    }
 
-    public init(connector: ServerServicesConnector) {
+    init(connector: ServerServicesConnector) {
         self.connector = connector
     }
 
-    public func setTrackingAction(input: SetTrackingActionRequest, completion: ((Error?) -> Void)?) {
+    func setTrackingAction(input: SetTrackingActionRequest, completion: ((Error?) -> Void)?) {
         call("setTrackingAction", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func getTracks(input: GetTracksRequest, completion: ((GetTracksResponse?, Error?) -> Void)?) {
+    func getTracks(input: GetTracksRequest, completion: ((GetTracksResponse?, Error?) -> Void)?) {
         call("getTracks", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func setSensorData(input: SetSensorDataRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
+    func setSensorData(input: SetSensorDataRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
         // replaced protocol type: SessionResponse with concrete subclass: GetPersonsResponse
         call("setSensorData", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func addTrack(input: AddTrackRequest, completion: ((AddTrackResponse?, Error?) -> Void)?) {
+    func addTrack(input: AddTrackRequest, completion: ((AddTrackResponse?, Error?) -> Void)?) {
         call("addTrack", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func updateTrack(input: UpdateTrackRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
+    func updateTrack(input: UpdateTrackRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
         // replaced protocol type: SessionResponse with concrete subclass: GetPersonsResponse
         call("updateTrack", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
-    public func deleteTracks(input: DeleteTracksRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
+    func deleteTracks(input: DeleteTracksRequest, completion: ((GetPersonsResponse?, Error?) -> Void)?) {
         // replaced protocol type: SessionResponse with concrete subclass: GetPersonsResponse
         call("deleteTracks", parameters: ["req": input.jsobjRepresentation], completion: completion)
     }
 
     private func call<T: JSOBJSerializable>(_ function: String, parameters: JSOBJ?, completion: ((T?, Error?) -> Void)?) {
-        connector.callServerFunction(named: function, parameters: parameters) { (rslt, error) in
+        connector.callWSDLFunction(named: function, parameters: parameters) { (rslt, error) in
             if let error = error { completion?(nil, error) }
             else {
                 if let obj = T(jsonData: (rslt as? [String: Any])?["return"] as? JSOBJ) { completion?(obj, nil) }                else { completion?(nil, DTOServiceError.unableToCreateDTO) }
@@ -56,7 +59,7 @@ public struct TrackingManagementService {
     }
 
     private func call(_ function: String, parameters: JSOBJ?, completion: ((Error?) -> Void)?) {
-        connector.callServerFunction(named: function, parameters: parameters) { (rslt, error) in
+        connector.callWSDLFunction(named: function, parameters: parameters) { (rslt, error) in
             completion?(error)
         }
     }

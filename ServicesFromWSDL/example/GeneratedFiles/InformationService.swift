@@ -12,27 +12,30 @@
 import Foundation
 import DLRModels
 
-public struct InformationService {
+struct InformationService {
     private let connector: ServerServicesConnector
+    enum DTOServiceError: Error {
+        case none, unableToCreateDTO
+    }
 
-    public init(connector: ServerServicesConnector) {
+    init(connector: ServerServicesConnector) {
         self.connector = connector
     }
 
-    public func getStatistic(completion: ((GetStatisticResponse?, Error?) -> Void)?) {
-        call("getStatistic", parameters: ["req": input.jsobjRepresentation], completion: completion)
+    func getStatistic(completion: ((GetStatisticResponse?, Error?) -> Void)?) {
+        call("getStatistic", parameters: nil, completion: completion)
     }
 
-    public func getAvailableObjects(completion: ((GetObjectsResponse?, Error?) -> Void)?) {
-        call("getAvailableObjects", parameters: ["req": input.jsobjRepresentation], completion: completion)
+    func getAvailableObjects(completion: ((GetObjectsResponse?, Error?) -> Void)?) {
+        call("getAvailableObjects", parameters: nil, completion: completion)
     }
 
-    public func getCompanies(completion: ((GetCompaniesResponse?, Error?) -> Void)?) {
-        call("getCompanies", parameters: ["req": input.jsobjRepresentation], completion: completion)
+    func getCompanies(completion: ((GetCompaniesResponse?, Error?) -> Void)?) {
+        call("getCompanies", parameters: nil, completion: completion)
     }
 
     private func call<T: JSOBJSerializable>(_ function: String, parameters: JSOBJ?, completion: ((T?, Error?) -> Void)?) {
-        connector.callServerFunction(named: function, parameters: parameters) { (rslt, error) in
+        connector.callWSDLFunction(named: function, parameters: parameters) { (rslt, error) in
             if let error = error { completion?(nil, error) }
             else {
                 if let obj = T(jsonData: (rslt as? [String: Any])?["return"] as? JSOBJ) { completion?(obj, nil) }                else { completion?(nil, DTOServiceError.unableToCreateDTO) }
@@ -41,7 +44,7 @@ public struct InformationService {
     }
 
     private func call(_ function: String, parameters: JSOBJ?, completion: ((Error?) -> Void)?) {
-        connector.callServerFunction(named: function, parameters: parameters) { (rslt, error) in
+        connector.callWSDLFunction(named: function, parameters: parameters) { (rslt, error) in
             completion?(error)
         }
     }
