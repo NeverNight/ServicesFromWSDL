@@ -8,30 +8,11 @@
 
 import Cocoa
 
-class XML2SwiftFiles {
-    let parser: WSDLDefinitionParser
-    let protocolInitializerLookup: [String: [String]]
+class XML2SwiftFiles: BaseExporter, DTOFileGenerator {
 
-    init(parser: WSDLDefinitionParser, protocolInitializerLookup: [String: [String]]) {
-        self.parser = parser
-        self.protocolInitializerLookup = protocolInitializerLookup
-    }
-
-    let indent = "    "
-
-    final func generateFiles(inFolder folderPath: String? = nil) {
-        let info = ProcessInfo.processInfo
-        let workingDirectory = info.environment["PWD"]
-        let pwd = (folderPath ?? workingDirectory)!
-
-        if let content = generateServiceCode() {
-            writeContent(content, toFileAtPath: pathForClassName(parser.serviceName, inFolder: pwd))
-        }
-    }
-
-    func generateServiceCode() -> String? {
+    override func generateServiceCode() -> String? {
         let filename = parser.serviceName
-        var classString = parser.headerStringFor(filename: filename)
+        var classString = parser.headerStringFor(filename: filename, outputType: .swift)
 
         classString += "import Foundation\n"
         if !dtoModuleName.isEmpty {

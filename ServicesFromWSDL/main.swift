@@ -12,35 +12,16 @@ import Foundation
 let copyRightString = "Copyright (c) 2016 Farbflash. All rights reserved."
 let dtoModuleName = "DLRModels"
 
-func readProtocolParentLookup(targetFolder: String?) -> [String: [String]] {
-    guard let targetFolder = targetFolder else { return [String: [String]]() }
-    let fileurl = URL(fileURLWithPath: targetFolder)
-    let newUrl = fileurl.appendingPathComponent("DTOParentInfo.json")
-    guard let data = try? Data(contentsOf: newUrl),
-        let json = try? JSONSerialization.jsonObject(with: data as Data, options: .allowFragments),
-        let lookuplist = json as? [String: [String]] else { return [String: [String]]() }
-    return lookuplist
+let options = CliArguments()
+guard let firstInputFile = options.paths.first,
+    let targetFolder = options.destination.nonEmptyString else {
+        // Expecting a string but didn't receive it
+        writeToStdError("Expected string argument defining the output folder and at least one path to an XML file!\n")
+        options.printHelpText()
+        exit(EXIT_FAILURE)
 }
 
-func filename(for url: URL) -> String? {
-    if let nameParts = url.pathComponents.last?.components(separatedBy: "."),
-        !nameParts.isEmpty {
-        if nameParts.count == 1 { return nameParts[0] }
-        return "\((nameParts[0..<(nameParts.count - 1)].joined(separator: ".")))"
-    }
-    return nil
-}
-
-if CommandLine.arguments.count < 3 {
-    // Expecting a string but didn't receive it
-    writeToStdError("Expected string argument defining the output folder and at least one path to an XML file!\n")
-    writeToStdError("Usage: \(CommandLine.arguments[0]) [target directory] [xml file(s)...]\n")
-    exit(EXIT_FAILURE)
-}
-
-let path = CommandLine.arguments[2]
-
-let url = URL(fileURLWithPath: path)
+let url = URL(fileURLWithPath: firstInputFile)
 
 // Check if the file exists, exit if not
 var error: NSError?
@@ -48,29 +29,38 @@ if !(url as NSURL).checkResourceIsReachableAndReturnError(&error) {
     exit(EXIT_FAILURE)
 }
 
-let targetFolder: String? = CommandLine.arguments[1]
-
 let protocolParentLookup = readProtocolParentLookup(targetFolder: targetFolder)
 
 do {
     let xml = try XMLDocument(contentsOf: url, options: 0)
 
     if let parser = WSDLDefinitionParser(xmlData: xml, serviceIdentifier: filename(for: url)) {
-        let generator = XML2SwiftFiles(parser: parser,
+        let generator: DTOFileGenerator
+        switch options.mode {
+        case .swift:
+            generator = XML2SwiftFiles(parser: parser,
                                        protocolInitializerLookup: protocolParentLookup)
+        case .java:
+            generator = XML2SwiftFiles(parser: parser,
+                                       protocolInitializerLookup: protocolParentLookup)
+        }
         generator.generateFiles(inFolder: targetFolder)
     }
     // if there is more than one xml file specified
-    // add them now to the array of elements:
-    var i = 3
-    while CommandLine.arguments.count > i {
-        let thisPath = CommandLine.arguments[i]
-        i += 1
+    // process them now:
+    for thisPath in options.paths[1..<options.paths.count] {
         let thisUrl = URL(fileURLWithPath: thisPath)
         if let thisXML = try? XMLDocument(contentsOf: thisUrl, options: 0) {
             if let subparser = WSDLDefinitionParser(xmlData: thisXML, serviceIdentifier: filename(for: thisUrl)) {
-                let generator = XML2SwiftFiles(parser: subparser,
+                let generator: DTOFileGenerator
+                switch options.mode {
+                case .swift:
+                    generator = XML2SwiftFiles(parser: subparser,
+                                                   protocolInitializerLookup: protocolParentLookup)
+                case .java:
+                    generator = XML2JavaFiles(parser: subparser,
                                                protocolInitializerLookup: protocolParentLookup)
+                }
                 generator.generateFiles(inFolder: targetFolder)
             }
         }
