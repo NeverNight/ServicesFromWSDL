@@ -29,11 +29,17 @@ class BaseExporter {
         let pwd = (folderPath ?? workingDirectory)!
 
         if let content = generateServiceCode() {
-            writeContent(content, toFileAtPath: pathForClassName(parser.serviceName, inFolder: pwd, outputType: .java))
+            writeContent(content, toFileAtPath: pathForClassName(parser.serviceName, inFolder: pwd, outputType: fileTypeExtension()))
         }
     }
 
     func generateServiceCode() -> String? {
         return "Override 'generateServiceCode()' in your concrete subclass of BaseExporter!"
+    }
+
+    func fileTypeExtension() -> OutputType {
+        // Override 'fileTypeExtension()' in your concrete subclass of BaseExporter!
+        // default type is swift
+        return .swift
     }
 }

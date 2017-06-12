@@ -21,9 +21,14 @@ class XML2JavaFiles: BaseExporter, DTOFileGenerator {
         classString += "\nclass \(filename) {\n"
 
         let indent = "    "
-        
 
         classString += "}"
         return classString
+    }
+
+    override func fileTypeExtension() -> OutputType {
+        // Override 'fileTypeExtension()' in your concrete subclass of BaseExporter!
+        // default type is swift
+        return .java
     }
 }

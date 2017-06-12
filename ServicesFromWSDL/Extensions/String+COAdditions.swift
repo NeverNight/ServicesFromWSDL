@@ -23,7 +23,7 @@ extension String {
         guard !isEmpty else { return self }
         return substring(to: index(startIndex, offsetBy: 1)).uppercased() + substring(from: index(startIndex, offsetBy: 1))
     }
-    
+
     /// This is the equivalent to the Optional's 'nonEmptyString'
     /// so that we can use it interchangeble for Strings and optional Strings
     ///
