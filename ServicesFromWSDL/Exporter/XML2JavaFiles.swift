@@ -14,15 +14,57 @@ class XML2JavaFiles: BaseExporter, DTOFileGenerator {
         let filename = parser.serviceName
         var classString = parser.headerStringFor(filename: filename, outputType: .java)
 
-        classString += "include Some.Java.class\n"
-        if !dtoModuleName.isEmpty {
-            classString += "include \(dtoModuleName)\n"
-        }
-        classString += "\nclass \(filename) {\n"
+        classString += "\npackage data.api.service.SoapServices.GeneratedFiles;"
+        classString += "\n"
+        classString += "\nimport component.module.JsonModule;"
+        classString += "\nimport data.api.model.GeneratedFiles.*;"
+        classString += "\nimport data.api.service.SoapServices.BaseSoapService;"
+        classString += "\nimport rx.Observable;"
+        classString += "\n"
+        classString += "\npublic class \(filename) extends BaseSoapService {\n"
+        classString += "\n"
 
         let indent = "    "
 
-        classString += "}"
+        classString += "\n\(indent)public \(filename)(JsonModule jsonModule) {"
+        classString += "\n\(indent)\(indent)super(jsonModule);\n\(indent)}"
+
+        for service in parser.services {
+            var hasInput = false
+            let inputTypeResolved: String
+            classString += "\n\(indent)public Observable<Object> \(service.name)("
+            if let inputType = service.input?.type,
+                !inputType.isEmpty {
+                inputTypeResolved = inputType.components(separatedBy: ":").last!.capitalizedFirst
+                classString += "\(inputTypeResolved) request) {\n"
+                hasInput = true
+            } else {
+                classString += ") {\n"
+                inputTypeResolved = "null"
+            }
+
+            classString += "\(indent)\(indent)return startRequest(\"\(parser.serviceIdentifier)\", \"\(service.name)\""
+
+            if hasInput {
+                classString += ", request"
+            } else {
+                classString += ", null"
+            }
+
+            if let outputType = service.output?.type,
+                !outputType.isEmpty {
+                let outputTypeResolved = outputType.components(separatedBy: ":").last!
+                    .capitalizedFirst
+                classString += ", \(outputTypeResolved).class"
+            } else {
+                classString += ", null"
+            }
+            classString += ");\n"
+
+            classString += "\(indent)}"
+        }
+
+        classString += "\n}"
         return classString
     }
 

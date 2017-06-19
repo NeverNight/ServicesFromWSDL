@@ -79,7 +79,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-d /Users/alex/Work/DLR/XcodeProject/MovingLab/MovingLab/Layers/Business/Services/SoapServices/GeneratedFiles /Users/alex/Work/DLR/XcodeProject/MovingLab/MovingLab/Layers/Business/Services/SoapServices/WSDLServiceDefinitions/wsdlDefinitions/user.xml /Users/alex/Work/DLR/XcodeProject/MovingLab/MovingLab/Layers/Business/Services/SoapServices/WSDLServiceDefinitions/wsdlDefinitions/info.xml /Users/alex/Work/DLR/XcodeProject/MovingLab/MovingLab/Layers/Business/Services/SoapServices/WSDLServiceDefinitions/wsdlDefinitions/tracking.xml"
+            argument = "-d /Users/alex/Work/DLR/XcodeProject/MovingLab/MovingLab/Layers/Business/Services/SoapServices/GeneratedFiles -m java /Users/alex/Work/DLR/XcodeProject/MovingLab/MovingLab/Layers/Business/Services/SoapServices/WSDLServiceDefinitions/wsdlDefinitions/user.xml /Users/alex/Work/DLR/XcodeProject/MovingLab/MovingLab/Layers/Business/Services/SoapServices/WSDLServiceDefinitions/wsdlDefinitions/info.xml /Users/alex/Work/DLR/XcodeProject/MovingLab/MovingLab/Layers/Business/Services/SoapServices/WSDLServiceDefinitions/wsdlDefinitions/tracking.xml"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

@@ -41,7 +41,7 @@ do {
             generator = XML2SwiftFiles(parser: parser,
                                        protocolInitializerLookup: protocolParentLookup)
         case .java:
-            generator = XML2SwiftFiles(parser: parser,
+            generator = XML2JavaFiles(parser: parser,
                                        protocolInitializerLookup: protocolParentLookup)
         }
         generator.generateFiles(inFolder: targetFolder)
