@@ -46,7 +46,7 @@ class XML2JavaFiles: BaseExporter, DTOFileGenerator {
             classString += "\(indent)\(indent)return startRequest(\"\(parser.serviceIdentifier)\", \"\(service.name)\""
 
             if hasInput {
-                classString += ", request"
+                classString += ", request.asParameterMap()"
             } else {
                 classString += ", null"
             }
