@@ -50,9 +50,33 @@ func writeContent(_ content: String, toFileAtPath fpath: String?) {
 
 }
 
-func pathForClassName(_ className: String, inFolder target: String?) -> String? {
+func pathForClassName(_ className: String, inFolder target: String?, outputType: OutputType = .swift) -> String? {
     guard let target = target else { return nil }
     let fileurl = URL(fileURLWithPath: target)
-    let newUrl = fileurl.appendingPathComponent(className).appendingPathExtension("swift")
+    let fileExt: String
+    switch outputType {
+    case .swift: fileExt = "swift"
+        case .java: fileExt = "java"
+    }
+    let newUrl = fileurl.appendingPathComponent(className).appendingPathExtension(fileExt)
     return newUrl.path
+}
+
+func readProtocolParentLookup(targetFolder: String?) -> [String: [String]] {
+    guard let targetFolder = targetFolder else { return [String: [String]]() }
+    let fileurl = URL(fileURLWithPath: targetFolder)
+    let newUrl = fileurl.appendingPathComponent("DTOParentInfo.json")
+    guard let data = try? Data(contentsOf: newUrl),
+        let json = try? JSONSerialization.jsonObject(with: data as Data, options: .allowFragments),
+        let lookuplist = json as? [String: [String]] else { return [String: [String]]() }
+    return lookuplist
+}
+
+func filename(for url: URL) -> String? {
+    if let nameParts = url.pathComponents.last?.components(separatedBy: "."),
+        !nameParts.isEmpty {
+        if nameParts.count == 1 { return nameParts[0] }
+        return "\((nameParts[0..<(nameParts.count - 1)].joined(separator: ".")))"
+    }
+    return nil
 }

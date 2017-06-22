@@ -64,18 +64,22 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "$PROJECT_DIR/ServicesFromWSDL/example/GeneratedFiles"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "$PROJECT_DIR/ServicesFromWSDL/example/wsdl/user.xml"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "$PROJECT_DIR/ServicesFromWSDL/example/wsdl/tracking.xml"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "$PROJECT_DIR/ServicesFromWSDL/example/wsdl/info.xml"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-d /Users/alex/Work/DLR/XcodeProject/MovingLab/MovingLab/Layers/Business/Services/SoapServices/GeneratedFiles -m java /Users/alex/Work/DLR/XcodeProject/MovingLab/MovingLab/Layers/Business/Services/SoapServices/WSDLServiceDefinitions/wsdlDefinitions/user.xml /Users/alex/Work/DLR/XcodeProject/MovingLab/MovingLab/Layers/Business/Services/SoapServices/WSDLServiceDefinitions/wsdlDefinitions/info.xml /Users/alex/Work/DLR/XcodeProject/MovingLab/MovingLab/Layers/Business/Services/SoapServices/WSDLServiceDefinitions/wsdlDefinitions/tracking.xml"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
