@@ -1,7 +1,9 @@
+Create services providers at AUTHORTIME(!) from one or more wsdl descriptions
+
 In order to create services files from one or more wsdl definitions:
 In the terminal change into this directory and execute:
 
-./ServicesFromWSDL ../GeneratedFiles wsdlDefinitions/user.xml wsdlDefinitions/tracking.xml wsdlDefinitions/info.xml
+./ServicesFromWSDL -d ../GeneratedFiles -m swift wsdlDefinitions/*.xml
 
 That will read in the xml files <2 parameter>...<n parameter> and output the generated swift files into the folder <1nd parameter>
 
@@ -15,7 +17,7 @@ and select the file corresponding to the entity, which you created, and add it t
 
 If you DELETED an existing entity:
 - generate all files with ServicesFromWSDL (see above)
-- delete the corrsponding class file in Xcode (select "move to trash" in the confirmation dialog)
+- delete the corresponding class file in Xcode (select "move to trash" in the confirmation dialog)
 
 If you changed the name of an existing entity:
 follow the steps above to ADD a new file AND follow the steps to remove the file with the old name
