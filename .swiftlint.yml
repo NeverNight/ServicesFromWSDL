@@ -5,16 +5,16 @@ disabled_rules: # rule identifiers to exclude from running
   # - vertical_whitespace
   # - trailing_whitespace
   # - mark
-  - statement_position
-  - syntactic_sugar
-  - operator_whitespace
-  - unused_closure_parameter
-  - nesting
+#- statement_position
+#- syntactic_sugar
+#- operator_whitespace
+#- unused_closure_parameter
+#- nesting
   - cyclomatic_complexity
-  - line_length
-  - identifier_name
-  - type_name
-  - redundant_string_enum_value
+#- line_length
+#- identifier_name
+#- type_name
+#- redundant_string_enum_value
 #  - variable_name
 opt_in_rules: # some rules are only opt-in
   # - empty_count
@@ -26,7 +26,7 @@ opt_in_rules: # some rules are only opt-in
   # - file_header
   - first_where
   # - missing_docs
-  # - force_unwrapping
+  - force_unwrapping
   # - operator_usage_whitespace
   - operator_whitespace
   - overridden_super_call
