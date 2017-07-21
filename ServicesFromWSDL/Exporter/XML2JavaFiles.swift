@@ -35,6 +35,7 @@ class XML2JavaFiles: BaseExporter, DTOFileGenerator {
             classString += "\n\(indent)public Observable<Object> \(service.name)("
             if let inputType = service.input?.type,
                 !inputType.isEmpty {
+                //swiftlint:disable:next force_unwrapping
                 inputTypeResolved = inputType.components(separatedBy: ":").last!.capitalizedFirst
                 classString += "\(inputTypeResolved) request) {\n"
                 hasInput = true
@@ -53,6 +54,7 @@ class XML2JavaFiles: BaseExporter, DTOFileGenerator {
 
             if let outputType = service.output?.type,
                 !outputType.isEmpty {
+                //swiftlint:disable:next force_unwrapping
                 let outputTypeResolved = outputType.components(separatedBy: ":").last!
                     .capitalizedFirst
                 classString += ", \(outputTypeResolved).class"

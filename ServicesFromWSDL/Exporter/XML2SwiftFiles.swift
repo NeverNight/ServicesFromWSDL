@@ -35,6 +35,7 @@ class XML2SwiftFiles: BaseExporter, DTOFileGenerator {
             classString += "\n\(indent)func \(service.name)("
             if let inputType = service.input?.type,
                 !inputType.isEmpty {
+                //swiftlint:disable:next force_unwrapping
                 let inputTypeResolved = inputType.components(separatedBy: ":").last!.capitalizedFirst
                 if let protocolInitializer = protocolInitializerLookup[inputTypeResolved]?.first {
                     classString += "input: \(protocolInitializer), "
@@ -46,6 +47,7 @@ class XML2SwiftFiles: BaseExporter, DTOFileGenerator {
             }
             if let outputType = service.output?.type,
                 !outputType.isEmpty {
+                //swiftlint:disable:next force_unwrapping
                 let outputTypeResolved = outputType.components(separatedBy: ":").last!
                     .capitalizedFirst
                 if let protocolInitializer = protocolInitializerLookup[outputTypeResolved]?.first {
@@ -61,22 +63,36 @@ class XML2SwiftFiles: BaseExporter, DTOFileGenerator {
                 classString += "\(indent)\(indent)// replaced protocol type: \(stringpair[0]) with concrete subclass: \(stringpair[1])\n"
             }
             if hasInput {
-            classString += "\(indent)\(indent)call(\"\(service.name)\", parameters: [\"req\": input.jsobjRepresentation], completion: completion)\n\(indent)}\n"
+                classString += "\(indent)\(indent)call(\"\(service.name)\", parameters: [\"req\": input.jsobjRepresentation], completion: completion)\n\(indent)}\n"
             } else {
-classString += "\(indent)\(indent)call(\"\(service.name)\", parameters: nil, completion: completion)\n\(indent)}\n"
+                classString += "\(indent)\(indent)call(\"\(service.name)\", parameters: nil, completion: completion)\n\(indent)}\n"
             }
         }
 
+        classString += "\n\(indent)//swiftlint:disable unused_optional_binding"
         classString += "\n\(indent)private func call<T: JSOBJSerializable>(_ function: String, parameters: JSOBJ?, completion: ((T?, Error?) -> Void)?) {\n"
         classString += "\(indent)\(indent)connector.callWSDLFunction(named: function, parameters: parameters, in: \"\(parser.serviceIdentifier)\") { (rslt, error) in\n"
-        classString += "\(indent)\(indent)\(indent)if let error = error { completion?(nil, error) }\n"
-        classString += "\(indent)\(indent)\(indent)else {\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)if let obj = T(jsonData: (rslt as? [String: Any])?[\"return\"] as? JSOBJ) { completion?(obj, nil) }"
-        classString += "\(indent)\(indent)\(indent)\(indent)else { completion?(nil, DTOServiceError.unableToCreateDTO) }\n"
+
+        classString += "\(indent)\(indent)\(indent)if let error = error {\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)completion?(nil, error)\n"
+        classString += "\(indent)\(indent)\(indent)} else {\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)guard let returnValue = (rslt as? [String: Any])?[\"return\"] else {\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)\(indent)completion?(nil, DTOServiceError.unableToCreateDTO)\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)\(indent)return\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)}\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)if let obj = T(jsonData: (returnValue as? JSOBJ)) {\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)\(indent)completion?(obj, nil)\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)} else if let _ = returnValue as? NSNull,\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)\(indent)let obj = T(jsonData: [String: Any]()) {\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)\(indent)completion?(obj, nil)\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)} else {\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)\(indent)completion?(nil, DTOServiceError.unableToCreateDTO)\n"
+        classString += "\(indent)\(indent)\(indent)\(indent)}\n"
+
         classString += "\(indent)\(indent)\(indent)}\n\(indent)\(indent)}\n\(indent)}\n"
 
         classString += "\n\(indent)private func call(_ function: String, parameters: JSOBJ?, completion: ((Error?) -> Void)?) {\n"
-        classString += "\(indent)\(indent)connector.callWSDLFunction(named: function, parameters: parameters, in: \"\(parser.serviceIdentifier)\") { (rslt, error) in\n"
+        classString += "\(indent)\(indent)connector.callWSDLFunction(named: function, parameters: parameters, in: \"\(parser.serviceIdentifier)\") { (_, error) in\n"
         classString += "\(indent)\(indent)\(indent)completion?(error)\n\(indent)\(indent)}\n\(indent)}\n"
 
         classString += "}"

@@ -26,7 +26,7 @@ class BaseExporter {
     final func generateFiles(inFolder folderPath: String? = nil) {
         let info = ProcessInfo.processInfo
         let workingDirectory = info.environment["PWD"]
-        let pwd = (folderPath ?? workingDirectory)!
+        let pwd = folderPath ?? workingDirectory ?? "$HOME"
 
         if let content = generateServiceCode() {
             writeContent(content, toFileAtPath: pathForClassName(parser.serviceName, inFolder: pwd, outputType: fileTypeExtension()))

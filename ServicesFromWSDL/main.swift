@@ -65,8 +65,7 @@ do {
             }
         }
     }
-}
-catch let err as NSError {
+} catch let err as NSError {
     writeToStdError(err.localizedDescription)
     exit(EXIT_FAILURE)
 }

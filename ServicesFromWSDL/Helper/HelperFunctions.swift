@@ -43,8 +43,7 @@ func writeContent(_ content: String, toFileAtPath fpath: String?) {
     do {
         try content.write(toFile: fpath, atomically: false, encoding: String.Encoding.utf8)
         writeToStdOut("Successfully written file to: \(fpath)\n")
-    }
-    catch let error as NSError {
+    } catch let error as NSError {
         writeToStdError("error: \(error.localizedDescription)")
     }
 
