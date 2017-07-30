@@ -18,21 +18,21 @@ class XML2SwiftFiles: BaseExporter, DTOFileGenerator {
         if !dtoModuleName.isEmpty {
             classString += "import \(dtoModuleName)\n"
         }
-        classString += "\nstruct \(filename) {\n"
+        classString += "\npublic struct \(filename) {\n"
 
         let indent = "    "
         classString += "\(indent)private let connector: ServerServicesConnector\n"
 
-        classString += "\(indent)enum DTOServiceError: Error {\n"
+        classString += "\(indent)public enum DTOServiceError: Error {\n"
         classString += "\(indent)\(indent)case none, unableToCreateDTO\n\(indent)}\n"
 
-        classString += "\n\(indent)init(connector: ServerServicesConnector) {\n"
+        classString += "\n\(indent)public init(connector: ServerServicesConnector) {\n"
         classString += "\(indent)    self.connector = connector\n\(indent)}\n"
 
         for service in parser.services {
             var repl = [[String]]()
             var hasInput = false
-            classString += "\n\(indent)func \(service.name)("
+            classString += "\n\(indent)public func \(service.name)("
             if let inputType = service.input?.type,
                 !inputType.isEmpty {
                 //swiftlint:disable:next force_unwrapping
@@ -69,33 +69,13 @@ class XML2SwiftFiles: BaseExporter, DTOFileGenerator {
             }
         }
 
-        classString += "\n\(indent)//swiftlint:disable unused_optional_binding"
-        classString += "\n\(indent)private func call<T: JSOBJSerializable>(_ function: String, parameters: JSOBJ?, completion: ((T?, Error?) -> Void)?) {\n"
-        classString += "\(indent)\(indent)connector.callWSDLFunction(named: function, parameters: parameters, in: \"\(parser.serviceIdentifier)\") { (rslt, error) in\n"
+        if let staticFuncsPath = Bundle.main.path(forResource: "staticFunctions", ofType: "txt"),
+            let staticFuncs = try? String(contentsOfFile: staticFuncsPath, encoding: .utf8) {
+            classString += "\n\(indent)//MARK: - Private\n\n"
+            classString += staticFuncs.replacingOccurrences(of: "%%serviceIdentifier%%", with: parser.serviceIdentifier)
+        }
 
-        classString += "\(indent)\(indent)\(indent)if let error = error {\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)completion?(nil, error)\n"
-        classString += "\(indent)\(indent)\(indent)} else {\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)guard let returnValue = (rslt as? [String: Any])?[\"return\"] else {\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)\(indent)completion?(nil, DTOServiceError.unableToCreateDTO)\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)\(indent)return\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)}\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)if let obj = T(jsonData: (returnValue as? JSOBJ)) {\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)\(indent)completion?(obj, nil)\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)} else if let _ = returnValue as? NSNull,\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)\(indent)let obj = T(jsonData: [String: Any]()) {\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)\(indent)completion?(obj, nil)\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)} else {\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)\(indent)completion?(nil, DTOServiceError.unableToCreateDTO)\n"
-        classString += "\(indent)\(indent)\(indent)\(indent)}\n"
-
-        classString += "\(indent)\(indent)\(indent)}\n\(indent)\(indent)}\n\(indent)}\n"
-
-        classString += "\n\(indent)private func call(_ function: String, parameters: JSOBJ?, completion: ((Error?) -> Void)?) {\n"
-        classString += "\(indent)\(indent)connector.callWSDLFunction(named: function, parameters: parameters, in: \"\(parser.serviceIdentifier)\") { (_, error) in\n"
-        classString += "\(indent)\(indent)\(indent)completion?(error)\n\(indent)\(indent)}\n\(indent)}\n"
-
-        classString += "}"
+        classString += "}\n"
         return classString
     }
 }

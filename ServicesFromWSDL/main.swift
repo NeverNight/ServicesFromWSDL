@@ -10,7 +10,7 @@ import Foundation
 
 /// adjust it for your needs, it is used for the header of each swift file
 let copyRightString = "Copyright (c) 2016 Farbflash. All rights reserved."
-let dtoModuleName = "DLRModels"
+let dtoModuleName = ""
 
 let options = CliArguments()
 guard let firstInputFile = options.paths.first,
@@ -63,6 +63,17 @@ do {
                 }
                 generator.generateFiles(inFolder: targetFolder)
             }
+        }
+    }
+
+    let filenames = [("ServerServicesConnector", "swift")]
+    let fileurl = URL(fileURLWithPath: targetFolder)
+
+    for (filename, ext) in filenames {
+        if let swfilePath = Bundle.main.path(forResource: filename, ofType: ext),
+            let classContents = try? String(contentsOfFile: swfilePath, encoding: String.Encoding.utf8) {
+            let newUrl = fileurl.appendingPathComponent(filename).appendingPathExtension(ext)
+            writeContent(classContents, toFileAtPath: newUrl.path)
         }
     }
 } catch let err as NSError {

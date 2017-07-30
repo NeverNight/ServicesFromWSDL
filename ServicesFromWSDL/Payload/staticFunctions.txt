@@ -1,0 +1,27 @@
+    //swiftlint:disable unused_optional_binding
+    private func call<T: JSOBJSerializable>(_ function: String, parameters: JSOBJ?, completion: ((T?, Error?) -> Void)?) {
+        connector.callWSDLFunction(named: function, parameters: parameters, in: "%%serviceIdentifier%%") { (rslt, error) in
+            if let error = error {
+                completion?(nil, error)
+            } else {
+                guard let returnValue = (rslt as? [String: Any])?["return"] else {
+                    completion?(nil, DTOServiceError.unableToCreateDTO)
+                    return
+                }
+                if let obj = T(jsonData: (returnValue as? JSOBJ)) {
+                    completion?(obj, nil)
+                } else if let _ = returnValue as? NSNull,
+                    let obj = T(jsonData: [String: Any]()) {
+                    completion?(obj, nil)
+                } else {
+                    completion?(nil, DTOServiceError.unableToCreateDTO)
+                }
+            }
+        }
+    }
+
+    private func call(_ function: String, parameters: JSOBJ?, completion: ((Error?) -> Void)?) {
+        connector.callWSDLFunction(named: function, parameters: parameters, in: "%%serviceIdentifier%%") { (_, error) in
+            completion?(error)
+        }
+    }
