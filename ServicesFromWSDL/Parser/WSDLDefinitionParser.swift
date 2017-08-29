@@ -13,6 +13,17 @@ struct Service {
     let input: Message?
     let output: Message?
 }
+
+extension Service: Comparable {}
+
+func < (lhs: Service, rhs: Service) -> Bool {
+    return lhs.name < rhs.name
+}
+
+func == (lhs: Service, rhs: Service) -> Bool {
+    return lhs.name == rhs.name
+}
+
 struct Message {
     let name: String
     let type: String

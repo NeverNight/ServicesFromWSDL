@@ -29,7 +29,10 @@ class XML2SwiftFiles: BaseExporter, DTOFileGenerator {
         classString += "\n\(indent)public init(connector: ServerServicesConnector) {\n"
         classString += "\(indent)    self.connector = connector\n\(indent)}\n"
 
-        for service in parser.services {
+        // we sort the functions alphabetically
+        // otherwise they come in random order and so it is difficult to track changes...
+        let sortedServices = parser.services.sorted()
+        for service in sortedServices {
             var repl = [[String]]()
             var hasInput = false
             classString += "\n\(indent)public func \(service.name)("
