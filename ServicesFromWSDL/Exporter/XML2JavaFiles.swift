@@ -29,7 +29,10 @@ class XML2JavaFiles: BaseExporter, DTOFileGenerator {
         classString += "\n\(indent)public \(filename)(JsonModule jsonModule) {"
         classString += "\n\(indent)\(indent)super(jsonModule);\n\(indent)}"
 
-        for service in parser.services {
+        // we sort the functions alphabetically
+        // otherwise they come in random order and so it is difficult to track changes...
+        let sortedServices = parser.services.sorted()
+        for service in sortedServices {
             var hasInput = false
             let inputTypeResolved: String
             classString += "\n\(indent)public Observable<Object> \(service.name)("

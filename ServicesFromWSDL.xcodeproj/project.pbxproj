@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		364840961F2DE7E70064E106 /* staticFunctions.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 364840951F2DE7A70064E106 /* staticFunctions.txt */; };
+		3648409A1F2DECD00064E106 /* ServerServicesConnector.swift in CopyFiles */ = {isa = PBXBuildFile; fileRef = 364840971F2DECAD0064E106 /* ServerServicesConnector.swift */; };
 		367045DF1EDACC2F009B392A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367045DE1EDACC2F009B392A /* main.swift */; };
 		367046391EDB0038009B392A /* Readme.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 367046381EDAFFBF009B392A /* Readme.txt */; };
 		FAE61AE41EE94E5B00C1E9E1 /* XML2SwiftFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE61ADC1EE94E5B00C1E9E1 /* XML2SwiftFiles.swift */; };
@@ -27,6 +29,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				3648409A1F2DECD00064E106 /* ServerServicesConnector.swift in CopyFiles */,
+				364840961F2DE7E70064E106 /* staticFunctions.txt in CopyFiles */,
 				367046391EDB0038009B392A /* Readme.txt in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -34,6 +38,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		364840951F2DE7A70064E106 /* staticFunctions.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = staticFunctions.txt; sourceTree = "<group>"; };
+		364840971F2DECAD0064E106 /* ServerServicesConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerServicesConnector.swift; sourceTree = "<group>"; };
 		367045DB1EDACC2F009B392A /* ServicesFromWSDL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ServicesFromWSDL; sourceTree = BUILT_PRODUCTS_DIR; };
 		367045DE1EDACC2F009B392A /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		367045E51EDAE0B7009B392A /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -70,6 +76,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		364840941F2DE79B0064E106 /* Payload */ = {
+			isa = PBXGroup;
+			children = (
+				364840971F2DECAD0064E106 /* ServerServicesConnector.swift */,
+				364840951F2DE7A70064E106 /* staticFunctions.txt */,
+			);
+			path = Payload;
+			sourceTree = "<group>";
+		};
 		367045D21EDACC2F009B392A = {
 			isa = PBXGroup;
 			children = (
@@ -98,6 +113,7 @@
 				FAE61AE21EE94E5B00C1E9E1 /* Parser */,
 				FAE61ADB1EE94E5B00C1E9E1 /* Exporter */,
 				FAE61ADD1EE94E5B00C1E9E1 /* Extensions */,
+				364840941F2DE79B0064E106 /* Payload */,
 				FAE61ADF1EE94E5B00C1E9E1 /* Helper */,
 				367045F21EDAE74D009B392A /* example */,
 				367046381EDAFFBF009B392A /* Readme.txt */,
